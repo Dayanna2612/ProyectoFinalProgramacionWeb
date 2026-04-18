@@ -1,12 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Videojuegos</title>
-  </head>
-  <body>
-    <div id="app"></div>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>ArcadeX 🎮</title>
+</head>
+<body>
 
-    <script type="module" src="/src/main.js"></script>
-  </body>
+  <h1>🎮 ArcadeX</h1>
+
+  <form id="formulario">
+    <input type="text" id="nombre" placeholder="Nombre" required>
+    <input type="text" id="genero" placeholder="Género" required>
+    <input type="text" id="plataforma" placeholder="Plataforma" required>
+    <input type="number" id="precio" placeholder="Precio" required>
+    <button type="submit">Guardar</button>
+  </form>
+
+  <div id="lista" class="grid"></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
 </html>

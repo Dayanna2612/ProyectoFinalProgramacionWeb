@@ -1,131 +1,78 @@
-import "./style.css";
-
+import './style.css';
 const API = "http://localhost:3000/videojuegos";
 
+let editando = null;
+
+// Cargar datos
 async function getVideojuegos() {
   const res = await fetch(API);
   const data = await res.json();
 
-  const lista = document.querySelector("#lista");
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "";
 
-  lista.innerHTML = data.map(v => `
-    <div class="card">
-      <h3>${v.nombre}</h3>
-      <p>Genero: ${v.genero}</p>
-      <p>Plataforma: ${v.plataforma}</p>
-      <p>Precio: ${v.precio}</p>
-      <button onclick="eliminar(${v.id})">Eliminar</button>
-    </div>
-  `).join('');
-}
+  data.forEach(juego => {
+    lista.innerHTML += `
+      <div class="card">
+        <h3>${juego.nombre}</h3>
+        <p>🎮 ${juego.genero}</p>
+        <p>🕹 ${juego.plataforma}</p>
+        <p>💲 ${juego.precio}</p>
 
-async function agregar(event) {
-  event.preventDefault();
-
-  const nombre = document.getElementById("nombre").value;
-  const genero = document.getElementById("genero").value;
-  const plataforma = document.getElementById("plataforma").value;
-  const precio = document.getElementById("precio").value;
-
-  await fetch(API, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ nombre, genero, plataforma, precio })
+        <button class="editar" onclick="cargarEditar(${juego.id}, '${juego.nombre}', '${juego.genero}', '${juego.plataforma}', ${juego.precio})">Editar</button>
+        <button class="eliminar" onclick="eliminar(${juego.id})">Eliminar</button>
+      </div>
+    `;
   });
-
-  document.getElementById("form").reset();
-  getVideojuegos();
 }
 
+// Agregar o editar
+document.getElementById("formulario").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const juego = {
+    nombre: document.getElementById("nombre").value,
+    genero: document.getElementById("genero").value,
+    plataforma: document.getElementById("plataforma").value,
+    precio: Number(document.getElementById("precio").value)
+  };
+
+  if (editando) {
+    await fetch(`${API}/${editando}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(juego)
+    });
+    editando = null;
+  } else {
+    await fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(juego)
+    });
+  }
+
+  e.target.reset();
+  getVideojuegos();
+});
+
+// Cargar datos para editar
+function cargarEditar(id, nombre, genero, plataforma, precio) {
+  document.getElementById("nombre").value = nombre;
+  document.getElementById("genero").value = genero;
+  document.getElementById("plataforma").value = plataforma;
+  document.getElementById("precio").value = precio;
+
+  editando = id;
+}
+
+// Eliminar
 async function eliminar(id) {
   await fetch(`${API}/${id}`, {
     method: "DELETE"
   });
-
   getVideojuegos();
 }
 
-document.querySelector('#app').innerHTML = `
-  <h1>🎮 CRUD Videojuegos</h1>
-
-  <form id="form">
-    <input id="nombre" placeholder="Nombre" required />
-    <input id="genero" placeholder="Genero" required />
-    <input id="plataforma" placeholder="Plataforma" required />
-    <input id="precio" type="number" placeholder="Precio" required />
-    <button type="submit">Agregar</button>
-  </form>
-
-  <div id="lista"></div>
-`;
-
-document.getElementById("form").addEventListener("submit", agregar);
-
-getVideojuegos();import "./style.css";
-
-const API = "http://localhost:3000/videojuegos";
-
-async function getVideojuegos() {
-  const res = await fetch(API);
-  const data = await res.json();
-
-  const lista = document.querySelector("#lista");
-
-  lista.innerHTML = data.map(v => `
-    <div class="card">
-      <h3>${v.nombre}</h3>
-      <p>Genero: ${v.genero}</p>
-      <p>Plataforma: ${v.plataforma}</p>
-      <p>Precio: ${v.precio}</p>
-      <button onclick="eliminar(${v.id})">Eliminar</button>
-    </div>
-  `).join('');
-}
-
-async function agregar(event) {
-  event.preventDefault();
-
-  const nombre = document.getElementById("nombre").value;
-  const genero = document.getElementById("genero").value;
-  const plataforma = document.getElementById("plataforma").value;
-  const precio = document.getElementById("precio").value;
-
-  await fetch(API, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ nombre, genero, plataforma, precio })
-  });
-
-  document.getElementById("form").reset();
-  getVideojuegos();
-}
-
-async function eliminar(id) {
-  await fetch(`${API}/${id}`, {
-    method: "DELETE"
-  });
-
-  getVideojuegos();
-}
-
-document.querySelector('#app').innerHTML = `
-  <h1>🎮 CRUD Videojuegos</h1>
-
-  <form id="form">
-    <input id="nombre" placeholder="Nombre" required />
-    <input id="genero" placeholder="Genero" required />
-    <input id="plataforma" placeholder="Plataforma" required />
-    <input id="precio" type="number" placeholder="Precio" required />
-    <button type="submit">Agregar</button>
-  </form>
-
-  <div id="lista"></div>
-`;
-
-document.getElementById("form").addEventListener("submit", agregar);
-
+// Inicial
 getVideojuegos();

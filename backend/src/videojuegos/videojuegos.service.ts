@@ -1,38 +1,44 @@
 import { Injectable } from '@nestjs/common';
-import { videojuegos } from './data';
+
+export interface Videojuego {
+  id: number;
+  nombre: string;
+  genero: string;
+  plataforma: string;
+  precio: number;
+}
 
 @Injectable()
 export class VideojuegosService {
 
-  findAll() {
-    return videojuegos;
+  private videojuegos: Videojuego[] = [];
+
+  findAll(): Videojuego[] {
+    return this.videojuegos;
   }
 
-  findOne(id: number) {
-    return videojuegos.find(v => v.id === id);
-  }
-
-  create(data: any) {
-    const nuevo = {
-      id: videojuegos.length + 1,
+  create(data: Omit<Videojuego, 'id'>): Videojuego {
+    const nuevo: Videojuego = {
+      id: Date.now(),
       ...data
     };
-    videojuegos.push(nuevo);
+    this.videojuegos.push(nuevo);
     return nuevo;
   }
 
-  update(id: number, data: any) {
-    const index = videojuegos.findIndex(v => v.id === id);
+  update(id: number, data: Partial<Videojuego>): Videojuego | null {
+    const index = this.videojuegos.findIndex(v => v.id == id);
+
     if (index !== -1) {
-      videojuegos[index] = { ...videojuegos[index], ...data };
+      this.videojuegos[index] = { ...this.videojuegos[index], ...data };
+      return this.videojuegos[index];
     }
-    return videojuegos[index];
+
+    return null;
   }
 
-  delete(id: number) {
-    const index = videojuegos.findIndex(v => v.id === id);
-    if (index !== -1) {
-      return videojuegos.splice(index, 1);
-    }
+  remove(id: number) {
+    this.videojuegos = this.videojuegos.filter(v => v.id != id);
+    return { mensaje: 'Eliminado' };
   }
 }

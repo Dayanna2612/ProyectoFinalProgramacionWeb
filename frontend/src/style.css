@@ -1,30 +1,89 @@
 body {
+  margin: 0;
   font-family: Arial, sans-serif;
-  background: #f4f4f4;
-  padding: 20px;
+  background: #0f172a;
+  color: white;
+  text-align: center;
 }
 
 h1 {
-  color: #333;
+  color: #22c55e;
+  text-shadow: 0 0 10px #22c55e;
 }
 
-form {
+.subtitulo {
+  color: #94a3b8;
   margin-bottom: 20px;
 }
 
+form {
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 input {
-  margin: 5px;
-  padding: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #1e293b;
+  color: white;
 }
 
 button {
-  padding: 8px;
+  background: #22c55e;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
   cursor: pointer;
+  color: black;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #16a34a;
+  transform: scale(1.05);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
 }
 
 .card {
-  background: white;
-  border: 1px solid #ccc;
-  margin: 10px 0;
-  padding: 10px;
+  background: #1e293b;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #22c55e33;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px #22c55e;
+}
+
+.card h3 {
+  color: #22c55e;
+}
+
+.botones {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.editar {
+  background: #3b82f6;
+  color: white;
+}
+
+.eliminar {
+  background: #ef4444;
+  color: white;
 }

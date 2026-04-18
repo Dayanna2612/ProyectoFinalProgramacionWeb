@@ -3,16 +3,12 @@ import { VideojuegosService } from './videojuegos.service';
 
 @Controller('videojuegos')
 export class VideojuegosController {
+
   constructor(private readonly service: VideojuegosService) {}
 
   @Get()
-  getAll() {
+  findAll() {
     return this.service.findAll();
-  }
-
-  @Get(':id')
-  getOne(@Param('id') id: string) {
-    return this.service.findOne(+id);
   }
 
   @Post()
@@ -26,7 +22,7 @@ export class VideojuegosController {
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.service.delete(+id);
+  remove(@Param('id') id: string) {
+    return this.service.remove(+id);
   }
 }
